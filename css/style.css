@@ -1,0 +1,47 @@
+/* style.css */
+/* Please feel free to rewrite all of this CSS */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #add8e6;
+  font-family: Arial;
+}
+
+input[type="text"] {
+  font-size: 1.5em;
+  padding: 10px;
+  border: solid 5px #c9c9c9;
+  transition: border 1s;
+  border-radius: 4px;
+}
+
+input[type="text"]:hover,
+input[type="text"].focus {
+  border: solid 5px #969696;
+}
+
+button {
+  margin-top: 20px;
+  color: #28aadc;
+  background-color: #fff;
+  border: 2px solid #28aadc;
+  border-radius: 4px;
+  padding: 12px 18px;
+}
+
+button:hover {
+  background: #28aadc;
+  color: #fff;
+}
+
+#weather {
+  margin: 50px auto;
+  padding: 20px;
+  background: #dadada;
+  border: 5px solid #969696;
+  display: none;
+  border-radius: 4px;
+}
