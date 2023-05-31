@@ -1,5 +1,4 @@
 /* style.css */
-/* Please feel free to rewrite all of this CSS */
 
 * {
   box-sizing: border-box;
@@ -7,21 +6,13 @@
 
 body {
   color: #fff;
-  /* font-family: 'Lobster', cursive;
-  font-family: 'Raleway', sans-serif; */
-  /* font-family: 'Abril Fatface', cursive;
-  font-family: 'Lobster', cursive;
-  font-family: 'Raleway', sans-serif; */
-  background-image: url(https://picsum.photos/id/16/2500/1667);
+  /* 46 */
+  /* 327 */
+  background-image: url(https://picsum.photos/id/327/2500/1667);
   background-size: cover;
   background-position: bottom;
   background-repeat: no-repeat;
   background-attachment: fixed;
-}
-
-.d-location{
-  border-radius: 30px;
-  background-color: rgba(44, 44, 44, 0.716);
 }
 
 input[type="text"] {
@@ -30,55 +21,20 @@ input[type="text"] {
   border-radius: 20px;
 }
 
-/* .input_location{
-  margin-top: 370px;
-} */
-
 .icon{
   width: 50px;
   height: 50px;
 }
 
 .weather_form{
-  background-color: rgba(44, 44, 44, 0.716);
-  /* background: rgb(148,187,233);
-  background: linear-gradient(101deg, rgba(148,187,233,1) 39%, rgba(253,187,45,1) 100%); */
+  background-color: rgba(44, 44, 44, 0.693);
 }
 
-.scrollContainer{
-  overflow-x: auto;
-  white-space:normal;
-}
 
-.scrollContent{
-  width: auto;
-}
 
-/* input[type="text"]:hover,
-input[type="text"].focus {
-  border: solid 5px #969696;
-} */
 
 .btn {
   border-radius: 20px;
-}
-
-/* button:hover {
-  background: #28aadc;
-  color: #fff;
-} */
-
-/* #weather {
-  margin: 50px auto;
-  padding: 20px;
-  background: #dadada;
-  border: 5px solid #969696;
-  display: none;
-  border-radius: 4px;
-} */ 
-
-.day{
-  width: 150px;
 }
 
 .day:hover{
