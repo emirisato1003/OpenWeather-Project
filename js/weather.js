@@ -18,7 +18,6 @@ const getLatLon = (data, zipCode) => {
         // Show the initially hidden div
         error.style.display = 'block';
         error.innerHTML = '<div class="alert alert-sm alert-danger" role="alert">⚠️ Please enter a valid Zip Code</div>';
-
         return; // exit
     } else {
         // return an array of the latitude and longitude
@@ -35,24 +34,22 @@ const getCurrentWeather = (data) => {
         error.innerHTML = 'Please enter a valid Zip Code';
         return; // exit
     } else {
-        error.innerHTML = "";
-    }
+        error.innerHTML = " ";
 
-    let date_sunrise = new Date(data.sys.sunrise * 1000);
-    let date_sunset = new Date(data.sys.sunset * 1000);
-    let sunrise = date_sunrise.toLocaleTimeString('en-us').replace(/:\d+ /, ' ');
-    let sunset = date_sunset.toLocaleTimeString('en-us').replace(/:\d+ /, ' ');
-    console.log(sunrise);
+        let date_sunrise = new Date(data.sys.sunrise * 1000);
+        let date_sunset = new Date(data.sys.sunset * 1000);
+        let sunrise = date_sunrise.toLocaleTimeString('en-us').replace(/:\d+ /, ' ');
+        let sunset = date_sunset.toLocaleTimeString('en-us').replace(/:\d+ /, ' ');
 
-    let location = document.querySelector('.d-location');
-    location.innerHTML = `<h1 class="display-2 text-center mt-3 text-dark">
+        let location = document.querySelector('.d-location');
+        location.innerHTML = `<h1 class="display-2 text-center mt-3 text-dark">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
                                                 <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
                                             </svg> ${data.name},${data.sys.country}
                                         </h1>`;
 
-    // get current weather in #the weather
-    weatherContent.innerHTML = `<div class="weather_form rounded-5 px-3">
+        // get current weather in #the weather
+        weatherContent.innerHTML = `<div class="weather_form rounded-5 px-3">
                                     <div class="text-center">
                                         <h1 class="display-1 text-center d-inline-block">${parseInt(data.main.temp)}°</h1>
                                         <img src="" alt="" id="icon" class="d-inline-block">
@@ -61,7 +58,7 @@ const getCurrentWeather = (data) => {
                                     </div>
                                     <hr>
                                     <div id="airCondition">
-                                        <div class="d-flex justify-content-center flex-wrap gap-2 mb-3">
+                                        <div class="d-flex justify-content-center flex-wrap gap-2">
                                             <div class="box border rounded-5 p-3">
                                                 <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
                                                         <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
@@ -106,13 +103,11 @@ const getCurrentWeather = (data) => {
                                 </div>`;
 
 
-    // const icon = document.createElement('img'); // create img element for icon
-    icon.src = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`; // set the src attribute using the data from the API
-    const weather_icon = document.querySelector('#icon');
-    weather_icon.append(icon); // add the icon to the DOM
+        icon.src = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`; // set the src attribute using the data from the API
+    }
 };
 
-// This function must be used to display the 5 day weather forecast
+// This function must be used to display the 5 day/ 3hrs weather forecast
 const getWeatherForecast = (data) => {
     // check to see if there is valid zip code
     if (data.cod == '400' || data.cod == '404' || data.cod == '401') {
@@ -123,30 +118,26 @@ const getWeatherForecast = (data) => {
     } else {
         // default value
         error.innerHTML = "";
+
+        const hourlyForecastContainer = document.querySelector('#hourlyForecastContainer');
+        hourlyForecastContainer.classList = "weather_form p-3 rounded-5";
+        // get hourly forecast
+        document.querySelector('#hourlyForecastTitle').innerHTML = 'Hourly Forecast' + '<hr>';
+
+        for (let i = 0; i < 5; i++) {
+            // handle with hourly forecast time text
+            let hourlyWeatherText = document.querySelector('#hfText_' + [i]);
+            hourlyWeatherText.innerHTML = `<h5>${new Date(data.list[i].dt * 1000).toLocaleTimeString('en-us', { hour12: true, hour: 'numeric', minute: '2-digit' })}</h5>`;
+            // handle with hf Icon
+            let hfIcon = document.querySelector(`#hf-icon_${i}`);
+            hfIcon.src = `http://openweathermap.org/img/wn/${data.list[i].weather[0].icon}@2x.png`;
+
+            // handle with hourly forecast Temp
+            const hfTemp = document.querySelector(`#hf-temp-${i}`);
+            hfTemp.innerHTML = `<h5>${parseInt(data.list[i].main.temp)}°</h5>`;
+            // console.log(hfTemp);
+        }
     }
-
-    const hourlyForecastContainer = document.querySelector('#hourlyForecastContainer');
-    hourlyForecastContainer.classList = "weather_form p-3 rounded-5";
-    // get hourly forecast
-    document.querySelector('#hourlyForecastTitle').innerHTML = 'Hourly Forecast' + '<hr>';
-    for (let i = 0; i < 6; i++) {
-        let hourlyDateTime = new Date(data.list[i].dt * 1000);
-        let hourStr = hourlyDateTime.toLocaleTimeString('en-us', { hour12: true, hour: 'numeric', minute: '2-digit' });
-        let hourlyWeatherText = document.querySelector('#hfText_' + [i + 1]);
-        hourlyWeatherText.innerHTML = `<h5>${hourStr}</h5>`;
-        // console.log(hourlyWeatherText);
-
-        // handle with hf Icon
-        let hfIcon = document.querySelector(`#hf-icon_${i + 1}`);
-        hfIcon.src = `http://openweathermap.org/img/wn/${data.list[i].weather[0].icon}@2x.png`;
-
-        // handle with hourly forecast Temp
-        const hfTemp = document.querySelector(`#hf-temp-${i + 1}`);
-        hfTemp.innerHTML = `<h5>${parseInt(data.list[i].main.temp)}°</h5>`;
-        // console.log(hfTemp);
-
-    }
-    hourlyForecastContainer.innerHTML = hourlyHTML;
 };
 
 
@@ -163,42 +154,43 @@ const getDailyWeatherForecast = (data) => {
     } else {
         // default value
         error.innerHTML = "";
-    }
 
-    document.querySelector('#days_forecast_container').classList = "rounded-5 weather_form p-1 mb-3";
-    document.querySelector('#dailyForecastTitle').innerHTML = '<p class="p-3">Weekly Forecast</p><hr>';
-    for (let i = 1; i < 8; i++) {
-        document.querySelector('.days_forecast_' + [i]).classList = "day border rounded mt-2 text-lg-center px-2 fs-5";
-        // handle with weekdays id
-        const dailyForecastDays = document.querySelector('#dfText_' + [i]);
-        dailyForecastDays.innerHTML = new Date(data.list[i].dt * 1000).toLocaleDateString('en-us', { weekday: 'long' });
-        // handle with daily weather icon
-        let dailyForecastIcon = document.querySelector('#dfIcon_' + [i]);
-        dailyForecastIcon.src = `http://openweathermap.org/img/wn/${data.list[i].weather[0].icon}@2x.png`;
-        dailyForecastIcon.alt = data.list[i].weather[0].description;
-        // handle with daily weather temperature
-        const dailyForecastMainTemp = document.querySelector('#dfTemp_' + [i]);
-        dailyForecastMainTemp.innerText = Math.floor(data.list[i].temp.day) + '°';
-        // console.log(dailyForecastMainTemp);
-    };
+        document.querySelector('#days_forecast_container').classList = "rounded-5 weather_form p-1 mb-3";
+        document.querySelector('#dailyForecastTitle').innerHTML = '<p class="p-3">5-days Forecast</p><hr>';
+        for (let i = 1; i < 6; i++) {
+            // console.log(data.list[i]);
+            let daysForecast = document.querySelector('.days_forecast_' + [i]);
+            daysForecast.classList = "day border rounded mt-2 text-lg-center px-2 fs-5";
+            // handle with weekdays id
+            const dailyForecastDays = document.querySelector('#dfText_' + [i]);
+            dailyForecastDays.innerHTML = `${new Date(data.list[i].dt * 1000).toLocaleDateString('en-us', { weekday: 'long' })}`;
+            // handle with daily weather icon
+            let dailyForecastIcon = document.querySelector('#dfIcon_' + [i]);
+            dailyForecastIcon.src = `http://openweathermap.org/img/wn/${data.list[i].weather[0].icon}@2x.png`;
+            dailyForecastIcon.alt = data.list[i].weather[0].description;
+            // handle with daily weather temperature
+            const dailyForecastMainTemp = document.querySelector('#dfTemp_' + [i]);
+            dailyForecastMainTemp.innerText = Math.floor(data.list[i].temp.day) + '°';
+            // console.log(dailyForecastMainTemp);
+        };
+    }
 };
 
 // function dailyForecastDetail() shows each date detail of weather forecast 
 const dailyForecastDetail = (data, dayNumber) => {
     //get array number from daily weather array
-    const daysWeather = data.list[dayNumber + 1];
-    for (let i = 0; i < 8; i++) {
-        // console.log(data.list[i]);
-        let dfDateTime = new Date(daysWeather.dt * 1000);
-        const dfDate = dfDateTime.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', day: 'numeric', month: 'short' });
-        const dfTempMax = Math.floor(daysWeather.temp.max);
-        const dfTempMin = Math.floor(daysWeather.temp.min);
-        const dfSunrise = new Date(daysWeather.sunrise * 1000).toLocaleTimeString('en-us', { hour12: true, hour: 'numeric', minute: '2-digit' });
-        const dfSunset = new Date(daysWeather.sunset * 1000).toLocaleTimeString('en-us', { hour12: true, hour: 'numeric', minute: '2-digit' });
-        const dfFeelsLike = Math.floor(daysWeather.feels_like.day);
-        const dfHumidity = daysWeather.humidity;
-        const dfWindSpeed = daysWeather.speed;
-        dailyWeatherData.innerHTML = `<div class="p-2 rounded-5">
+    const daysWeather = data.list[dayNumber];
+    // console.log(data.list[i]);
+    let dfDateTime = new Date(daysWeather.dt * 1000);
+    const dfDate = dfDateTime.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', day: 'numeric', month: 'short' });
+    const dfTempMax = Math.floor(daysWeather.temp.max);
+    const dfTempMin = Math.floor(daysWeather.temp.min);
+    const dfSunrise = new Date(daysWeather.sunrise * 1000).toLocaleTimeString('en-us', { hour12: true, hour: 'numeric', minute: '2-digit' });
+    const dfSunset = new Date(daysWeather.sunset * 1000).toLocaleTimeString('en-us', { hour12: true, hour: 'numeric', minute: '2-digit' });
+    const dfFeelsLike = Math.floor(daysWeather.feels_like.day);
+    const dfHumidity = daysWeather.humidity;
+    const dfWindSpeed = daysWeather.speed;
+    dailyWeatherData.innerHTML = `<div class="p-2 rounded-5">
                                         <p class="fs-4">${dfDate}</p>
                                         <hr>
                                         <div class="d-flex justify-content-around flex-wrap">
@@ -230,13 +222,14 @@ const dailyForecastDetail = (data, dayNumber) => {
                                             </div>
                                         </div>
                                     </div> `;
-    }
+    // console.log(dailyWeatherData);
 };
 
 
 document.querySelector('#getWeather').addEventListener('click', () => {
     let zipCode = document.querySelector('#zip').value;
     document.querySelector('#display-2').classList = 'd-none';
+
 
     // First call the geolocation API to get the latitude and longitude of the city name
     let url = `http://api.openweathermap.org/geo/1.0/zip?zip=${zipCode},US&appid=${API_KEY}`;
@@ -250,7 +243,6 @@ document.querySelector('#getWeather').addEventListener('click', () => {
 
             // Now get current weather data
             url = `http://api.openweathermap.org/data/2.5/weather?lat=${geo[0]}&lon=${geo[1]}&appid=${API_KEY}&units=imperial`;
-            // url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}&units=imperial`
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
@@ -261,26 +253,26 @@ document.querySelector('#getWeather').addEventListener('click', () => {
                     console.log(`This error occurred: ${e}`);
                 });
 
-            // Now get 5 days/3hrs forecast data
+            // Now get 3hrs forecast data using 5days/3hrs
             url = `http://api.openweathermap.org/data/2.5/forecast?lat=${geo[0]}&lon=${geo[1]}&appid=${API_KEY}&units=imperial`;
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     // console.log(data);
                     // call getWeatherForecast function
-                    getWeatherForecast(data);
+                    getWeatherForecast(data, zipCode);
                 }).catch((e) => {
                     console.log(`This error occurred: ${e}`);
                 });
 
-            // get daily forecast data
-            url = `http://api.openweathermap.org/data/2.5/forecast/daily?lat=${geo[0]}&lon=${geo[1]}&cnt=8&appid=${API_KEY}&units=imperial`;
+            // get daily forecast data for 5 days
+            url = `http://api.openweathermap.org/data/2.5/forecast/daily?lat=${geo[0]}&lon=${geo[1]}&cnt=7&appid=${API_KEY}&units=imperial`;
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     // console.log(data);
                     // call getDailyWeatherForecast function
-                    getDailyWeatherForecast(data);
+                    getDailyWeatherForecast(data, zipCode);
 
                     const days = document.querySelectorAll("[data-weather-day]");
                     const weather_data = document.querySelector("[data-weather-data]");
