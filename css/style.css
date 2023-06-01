@@ -8,6 +8,7 @@ body {
   color: #fff;
   /* 46 */
   /* 327 */
+  /* 372 */
   background-image: url(https://picsum.photos/id/327/2500/1667);
   background-size: cover;
   background-position: bottom;
@@ -27,11 +28,10 @@ input[type="text"] {
 }
 
 .weather_form{
-  background-color: rgba(44, 44, 44, 0.693);
+  /* background-color: rgba(44, 44, 44, 0.693); */
+  background-color: rgba(60, 60, 60, 0.693);
+
 }
-
-
-
 
 .btn {
   border-radius: 20px;

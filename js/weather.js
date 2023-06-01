@@ -144,35 +144,20 @@ const getWeatherForecast = (data) => {
 const dailyWeatherData = document.querySelector('[data-weather-data]');
 // function displays the daily weather forecast
 const getDailyWeatherForecast = (data) => {
-    // check to see if there is valid zip code
-    if (data.cod == '400' || data.cod == '404' || data.cod == '401') {
-        // show the initially hidden div
-        error.style.display = 'block';
-        error.innerHTML = 'Please enter a valid Zip Code';
-        return; // exit
-    } else {
-        // default value
-        error.innerHTML = "";
-
-        document.querySelector('#days_forecast_container').classList = "rounded-5 weather_form p-1 mb-3";
-        document.querySelector('#dailyForecastTitle').innerHTML = '<p class="p-3">5-days Forecast</p><hr>';
-        for (let i = 1; i < 6; i++) {
-            // console.log(data.list[i]);
-            let daysForecast = document.querySelector('.days_forecast_' + [i]);
-            daysForecast.classList = "day border rounded mt-2 text-lg-center px-2 fs-5";
-            // handle with weekdays id
-            const dailyForecastDays = document.querySelector('#dfText_' + [i]);
-            dailyForecastDays.innerHTML = `${new Date(data.list[i].dt * 1000).toLocaleDateString('en-us', { weekday: 'long' })}`;
-            // handle with daily weather icon
-            let dailyForecastIcon = document.querySelector('#dfIcon_' + [i]);
-            dailyForecastIcon.src = `http://openweathermap.org/img/wn/${data.list[i].weather[0].icon}@2x.png`;
-            dailyForecastIcon.alt = data.list[i].weather[0].description;
-            // handle with daily weather temperature
-            const dailyForecastMainTemp = document.querySelector('#dfTemp_' + [i]);
-            dailyForecastMainTemp.innerText = Math.floor(data.list[i].temp.day) + '°';
-            // console.log(dailyForecastMainTemp);
-        };
-    }
+    document.querySelector('#days_forecast_container').classList = "rounded-5 weather_form p-1 mb-3";
+    document.querySelector('#dailyForecastTitle').innerHTML = '<p class="p-3">5-days Forecast</p><hr>';
+    for (let i = 1; i < 6; i++) {
+        document.querySelector('.days_forecast_' + [i]).classList.add("day");
+        // handle with weekdays id
+        document.querySelector('#dfText_' + [i]).innerHTML = `${new Date(data.list[i].dt * 1000).toLocaleDateString('en-us', { weekday: 'long' })}`;
+        // handle with daily weather icon
+        let dailyForecastIcon = document.querySelector('#dfIcon_' + [i]);
+        dailyForecastIcon.src = `http://openweathermap.org/img/wn/${data.list[i].weather[0].icon}@2x.png`;
+        dailyForecastIcon.alt = data.list[i].weather[0].description;
+        //     // handle with daily weather temperature
+        const dailyForecastMainTemp = document.querySelector('#dfTemp_' + [i]).innerText = Math.floor(data.list[i].temp.day) + '°';
+        // console.log(dailyForecastMainTemp);
+    };
 };
 
 // function dailyForecastDetail() shows each date detail of weather forecast 
@@ -271,7 +256,7 @@ document.querySelector('#getWeather').addEventListener('click', () => {
                 .then(data => {
                     // console.log(data);
                     // call getDailyWeatherForecast function
-                    getDailyWeatherForecast(data, zipCode);
+                    getDailyWeatherForecast(data);
 
                     const days = document.querySelectorAll("[data-weather-day]");
                     const weather_data = document.querySelector("[data-weather-data]");
